@@ -16,6 +16,8 @@ reconfiguring="Reconfiguring Morpheus..."
 echo "Install Morpheus version 4.2.3 (LTS) or 5.0.0 (Beta) for CentOS 7 or Ubuntu 16.04/18.04"
 echo "Press any key to begin"
 
+#Stores IP address to variable
+
 #Gets Linux distribution
 until [[ $distro == "c" ]] || [[ $distro == "u" ]]
 do

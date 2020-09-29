@@ -1,4 +1,4 @@
-# /bin/bash
+#!/bin/bash
 
 #Initialize variables
 ltsVer="4.2.3"

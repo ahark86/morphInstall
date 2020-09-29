@@ -1,22 +1,23 @@
 # /bin/bash
 
 #Initialize variables
-centLtsUrl="https://downloads.morpheusdata.com/files/morpheus-appliance-4.2.3-1.el7.x86_64.rpm"
-centLtsFile="morpheus-appliance-4.2.3-1.el7.x86_64.rpm"
-centBetaUrl="https://downloads.morpheusdata.com/files/morpheus-appliance-5.0.0-1.el7.x86_64.rpm"
-centBetaFile="morpheus-appliance-5.0.0-1.el7.x86_64.rpm"
-ubLtsUrl="https://downloads.morpheusdata.com/files/morpheus-appliance_4.2.3-1_amd64.deb"
-ubLtsFile="morpheus-appliance_4.2.3-1_amd64.deb"
-ubBetaUrl="https://downloads.morpheusdata.com/files/morpheus-appliance_5.0.0-1_amd64.deb"
-ubBetaFile="morpheus-appliance_5.0.0-1_amd64.deb"
+ltsVer="4.2.3"
+betaVer="5.0.0"
+centLtsUrl="https://downloads.morpheusdata.com/files/morpheus-appliance-${ltsVer}-1.el7.x86_64.rpm"
+centLtsFile="morpheus-appliance-${ltsVer}-1.el7.x86_64.rpm"
+centBetaUrl="https://downloads.morpheusdata.com/files/morpheus-appliance-${betaVer}-1.el7.x86_64.rpm"
+centBetaFile="morpheus-appliance-${betaVer}0-1.el7.x86_64.rpm"
+ubLtsUrl="https://downloads.morpheusdata.com/files/morpheus-appliance_${ltsVer}-1_amd64.deb"
+ubLtsFile="morpheus-appliance_${ltsVer}-1_amd64.deb"
+ubBetaUrl="https://downloads.morpheusdata.com/files/morpheus-appliance_${betaVer}-1_amd64.deb"
+ubBetaFile="morpheus-appliance_${betaVer}-1_amd64.deb"
 installing="Installing Morpheus..."
 reconfiguring="Reconfiguring Morpheus..."
+restarting="Restarting Morpheus UI... This may take a couple minutes..."
 
 #Instructions
-echo "Install Morpheus version 4.2.3 (LTS) or 5.0.0 (Beta) for CentOS 7 or Ubuntu 16.04/18.04"
+echo "Install Morpheus version ${ltsVer} (LTS) or ${betaVer} (Beta) for CentOS 7 or Ubuntu 16.04/18.04"
 echo "Press any key to begin"
-
-#Stores IP address to variable
 
 #Gets Linux distribution
 until [[ $distro == "c" ]] || [[ $distro == "u" ]]
@@ -28,17 +29,17 @@ done
 #Gets desired Morpheus install package
 echo "Choose the Morpheus version you wish to install:"
 
-select ver in 4.2.3 5.0.0
+select ver in $ltsVer $betaVer
 do
 	case $ver in
-	4.2.3)
+	$ltsVer)
 		if [[ $distro == "c" ]]
 		then
 			curl ${centLtsUrl} > ${centLtsFile}
 		else
 			curl ${ubLtsUrl} > ${ubLtsFile}
 		fi;;
-	5.0.0)
+	$betaVer)
 		if [[ $distro == "c" ]]
 		then
 			curl ${centBetaUrl} > ${centBetaFile}
@@ -66,3 +67,30 @@ else
 	sudo morpheus-ctl reconfigure
 fi
 
+#Updates appliance_url in morpheus.rb
+echo "Do you wish to update appliance_url?"
+echo "This is often required if the appliance machine name is not resolveable from the accessing machine\'s web browser (https://appliance_machine_name)"
+echo "(y/n)"
+read updateUrl
+
+if [[ updateUrl == "y" ]]
+then
+	echo "Please provide the IP address for the appliance"
+	read ip
+
+	#Updates morpheus.rb
+
+	#Reconfigures and restarts Morpheus UI
+	echo $reconfiguring
+	sudo morpheus-ctl reconfigure
+
+	echo $restarting
+	sudo morpheus-ctl stop morpheus-ui
+	sudo morpheus-ctl start morpheus-ui
+else
+	echo "Moving on..."
+fi
+
+#Provides access details
+
+echo "Done!"

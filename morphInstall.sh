@@ -69,11 +69,11 @@ fi
 
 #Updates appliance_url in morpheus.rb
 echo "Do you wish to update appliance_url?"
-echo "This is often required if the appliance machine name is not resolveable from the accessing machine\'s web browser (https://appliance_machine_name)"
+echo "This is often required if the appliance machine name is not resolveable from the web browser of the accessing machine (https://appliance_machine_name)"
 echo "(y/n)"
 read updateUrl
 
-if [[ updateUrl == "y" ]]
+if [[ $updateUrl == "y" ]]
 then
 	echo "Please provide the IP address for the appliance"
 	read ip
@@ -92,5 +92,4 @@ else
 fi
 
 #Provides access details
-
 echo "Done!"

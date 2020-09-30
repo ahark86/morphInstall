@@ -38,14 +38,16 @@ do
 			curl ${centLtsUrl} > ${centLtsFile}
 		else
 			curl ${ubLtsUrl} > ${ubLtsFile}
-		fi;;
+		fi
+		break;;
 	$betaVer)
 		if [[ $distro == "c" ]]
 		then
 			curl ${centBetaUrl} > ${centBetaFile}
 		else
 			curl ${ubBetaUrl} > ${ubBetaFile}
-		fi;;
+		fi
+		break;;
 	*)
 		echo "Please select an appropriate version";;
 	esac
